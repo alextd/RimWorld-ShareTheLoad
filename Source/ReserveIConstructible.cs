@@ -48,12 +48,14 @@ namespace Share_The_Load
 				Thing building = target.Thing;
 				Thing deliverThing = job.targetA.Thing;
 				ThingDef resource = deliverThing.def;
+				int neededCount = c.MaterialsNeeded().FirstOrDefault(tc => tc.thingDef == resource)?.count ?? 0;
 
 				Log.Message(claimant + " reserving " + building + " resource = " + resource + "(" + count + ")");
 				Log.Message("	out of: " + c.MaterialsNeeded().ToStringSafeEnumerable());
-				
+
+
 				int availableCount = deliverThing.stackCount + job.targetQueueA?.Sum(tar => tar.Thing.stackCount) ?? 0;
-				count = Mathf.Min(new int[] { count, claimant.carryTracker.AvailableStackSpace(resource), availableCount });
+				count = Mathf.Min(new int[] { count, claimant.carryTracker.MaxStackSpaceEver(resource), availableCount, neededCount });
 
 				Log.Message(c + " was expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
 				ExpectingComp.Add(claimant, job, building, resource, count);
