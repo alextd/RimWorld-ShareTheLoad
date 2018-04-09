@@ -73,7 +73,7 @@ namespace Share_The_Load
 			{
 				ThingCountClass thingNeeds = needs[i];
 				thingNeeds.count -= ExpectingComp.ExpectedCount(c, thingNeeds.thingDef);
-				if(thingNeeds.count == 0)
+				if(thingNeeds.count <= 0)
 				{
 					needs.Remove(thingNeeds);
 					i--;
