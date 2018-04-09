@@ -36,13 +36,15 @@ namespace Share_The_Load
 		//public bool Reserve(Pawn claimant, Job job, LocalTargetInfo target, int maxPawns = 1, int stackCount = -1, ReservationLayerDef layer = null)
 		public static bool Prefix(Pawn claimant, Job job, LocalTargetInfo target, ref bool __result)
 		{
-			if (claimant.IsFreeColonist && target.Thing is IConstructible c && !(c is Blueprint_Install)
+			if (claimant.IsFreeColonist
+				&& target.Thing is IConstructible c && !(c is Blueprint_Install)
 				&& job.def == JobDefOf.HaulToContainer)
 			{
 				int count = job.count;
 				Thing building = target.Thing;
 				Thing deliverThing = job.targetA.Thing;
 				ThingDef resource = deliverThing.def;
+
 				Log.Message(claimant + " reserving " + building + " resource = " + resource + "(" + count + ")");
 				Log.Message("	out of: " + c.MaterialsNeeded().ToStringSafeEnumerable());
 				
@@ -52,6 +54,7 @@ namespace Share_The_Load
 				Log.Message(c + " was expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
 				ExpectingComp.Add(claimant, job, building, resource, count);
 				Log.Message(c + " now expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
+
 				if (c.MaterialsNeeded().Count > 0)
 				{
 					__result = true;
@@ -68,7 +71,8 @@ namespace Share_The_Load
 		//public void Release(LocalTargetInfo target, Pawn claimant, Job job)
 		public static void Prefix(LocalTargetInfo target, Pawn claimant, Job job)
 		{
-			if (claimant.IsFreeColonist && target.Thing is IConstructible c && !(c is Blueprint_Install)
+			if (claimant.IsFreeColonist
+				&& target.Thing is IConstructible c && !(c is Blueprint_Install)
 				&& job.def == JobDefOf.HaulToContainer)
 				ExpectingComp.Remove(q => q.claimant == claimant && q.job == job && q.claimed == target.Thing);
 		}
