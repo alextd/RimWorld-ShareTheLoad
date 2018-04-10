@@ -26,7 +26,8 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Share The Load - Release\Assemblies\</OutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -66,5 +67,5 @@ IF /I "$(ConfigurationName)" == "Release"; xcopy "$(ProjectDir)..\Patches" "$(Ta
 IF /I "$(ConfigurationName)" == "Release"; xcopy "$(ProjectDir)..\Languages" "$(TargetDir)..\Languages" /S /C /Y /K  /I /Q /D
 IF /I "$(ConfigurationName)" == "Release"; xcopy "$(ProjectDir)..\Sounds" "$(TargetDir)..\Sounds" /S /C /Y /K  /I /Q /D
 IF /I "$(ConfigurationName)" == "Release"; xcopy "$(ProjectDir)..\Textures" "$(TargetDir)..\Textures" /S /C /Y /K /I /Q /D</PostBuildEvent>
-	</PropertyGroup>
+  </PropertyGroup>
 </Project>
