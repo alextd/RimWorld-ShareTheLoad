@@ -10,7 +10,7 @@ namespace Share_The_Load
 		public Mod(ModContentPack content) : base(content)
 		{
 			// initialize settings
-			// GetSettings<Settings>();
+			GetSettings<Settings>();
 #if DEBUG
 			HarmonyInstance.DEBUG = true;
 #endif
@@ -18,15 +18,15 @@ namespace Share_The_Load
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 		}
 
-//		public override void DoSettingsWindowContents(Rect inRect)
-//		{
-//			base.DoSettingsWindowContents(inRect);
-//			GetSettings<Settings>().DoWindowContents(inRect);
-//		}
-//
-//		public override string SettingsCategory()
-//		{
-//			return "Share The Load";
-//		}
+		public override void DoSettingsWindowContents(Rect inRect)
+		{
+			base.DoSettingsWindowContents(inRect);
+			GetSettings<Settings>().DoWindowContents(inRect);
+		}
+
+		public override string SettingsCategory()
+		{
+			return "Share The Load";
+		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Share_The_Load
 {
 	class Settings : ModSettings
 	{
-		public bool setting;
+		public bool deliverAsMuchAsYouCan = false;
 
 		public static Settings Get()
 		{
@@ -20,7 +20,7 @@ namespace Share_The_Load
 			var options = new Listing_Standard();
 			options.Begin(wrect);
 			
-			options.CheckboxLabeled("Sample setting", ref setting);
+			options.CheckboxLabeled("Deliver resources even if there's not enough to finish the building", ref deliverAsMuchAsYouCan);
 			options.Gap();
 
 			options.End();
@@ -28,7 +28,7 @@ namespace Share_The_Load
 		
 		public override void ExposeData()
 		{
-			Scribe_Values.Look(ref setting, "setting", true);
+			Scribe_Values.Look(ref deliverAsMuchAsYouCan, "deliverAsMuchAsYouCan", false);
 		}
 	}
 }
