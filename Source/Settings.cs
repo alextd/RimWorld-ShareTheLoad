@@ -20,7 +20,7 @@ namespace Share_The_Load
 			var options = new Listing_Standard();
 			options.Begin(wrect);
 			
-			options.CheckboxLabeled("Deliver resources even if there's not enough to finish the building", ref deliverAsMuchAsYouCan);
+			options.CheckboxLabeled("TD.SettingDeliverAny".Translate(), ref deliverAsMuchAsYouCan);
 			options.Gap();
 
 			options.End();

@@ -26,7 +26,7 @@ namespace Share_The_Load
 
 		public override string SettingsCategory()
 		{
-			return "Share The Load";
+			return "TD.ShareTheLoad".Translate();
 		}
 	}
 }
