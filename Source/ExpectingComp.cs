@@ -66,9 +66,14 @@ namespace Share_The_Load
 			GetQuotas().Add(new DeliverQuota(claimant, job, t, def, count));
 		}
 
+		public static int ExpectedCount(Predicate<DeliverQuota> filter)
+		{
+			return GetQuotas().FindAll(filter).Sum(q => q.count);
+		}
+
 		public static int ExpectedCount(Thing b, ThingDef res)
 		{
-			return GetQuotas().FindAll(q => q.claimed == b && q.resource == res).Sum(q => q.count);
+			return ExpectedCount(q => q.claimed == b && q.resource == res);
 		}
 	}
 
