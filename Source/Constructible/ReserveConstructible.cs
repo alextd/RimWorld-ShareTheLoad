@@ -42,7 +42,8 @@ namespace Share_The_Load
 		{
 			if (claimant.IsFreeColonist
 				&& target.Thing is IConstructible c && !(c is Blueprint_Install)
-				&& job.def == JobDefOf.HaulToContainer)
+				&& job.def == JobDefOf.HaulToContainer
+				&& c.MaterialsNeeded().Count > 0)
 			{
 				int count = job.count;
 				Thing building = target.Thing;
@@ -56,16 +57,11 @@ namespace Share_The_Load
 
 				int availableCount = deliverThing.stackCount + job.targetQueueA?.Sum(tar => tar.Thing.stackCount) ?? 0;
 				count = Mathf.Min(new int[] { count, claimant.carryTracker.MaxStackSpaceEver(resource), availableCount, neededCount });
-
 				Log.Message(c + " was expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
 				ExpectingComp.Add(claimant, job, building, resource, count);
 				Log.Message(c + " now expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
-
-				if (c.MaterialsNeeded().Count > 0)
-				{
-					__result = true;
-					return false;
-				}
+				__result = true;
+				return false;
 			}
 			return true;
 		}
