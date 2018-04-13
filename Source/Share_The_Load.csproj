@@ -41,6 +41,10 @@
       <HintPath>..\ThirdParty\0Harmony.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Core_SK">
+      <HintPath>..\..\..\ModLib\Core_SK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="ExtendedStorage, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ThirdParty\ExtendedStorage.dll</HintPath>
