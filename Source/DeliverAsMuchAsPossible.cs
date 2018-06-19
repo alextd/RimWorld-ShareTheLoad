@@ -13,8 +13,8 @@ namespace Share_The_Load
 	[HarmonyPatch(typeof(ItemAvailability), "ThingsAvailableAnywhere")]
 	public static class DeliverAsMuchAsPossible
 	{
-		//public bool ThingsAvailableAnywhere(ThingCountClass need, Pawn pawn)
-		public static bool Prefix(ThingCountClass need, Pawn pawn, ref bool __result)
+		//public bool ThingsAvailableAnywhere(ThingDefCountClass need, Pawn pawn)
+		public static bool Prefix(ThingDefCountClass need, Pawn pawn, ref bool __result)
 		{
 			if (Settings.Get().deliverAsMuchAsYouCan)
 			{
@@ -30,7 +30,7 @@ namespace Share_The_Load
 	//Honestly is a vanilla bug
 	//Would only deliver resource #2 once there's enough resource #1 
 	//Though resource #1 doesn't care if there's enough #2
-	[HarmonyPatch(typeof(WorkGiver_ConstructDeliverResources), "ResourceDeliverJobFor")]
+	//[HarmonyPatch(typeof(WorkGiver_ConstructDeliverResources), "ResourceDeliverJobFor")]
 	public static class BreakToContinue_Patch
 	{
 		//protected Job ResourceDeliverJobFor(Pawn pawn, IConstructible c, bool canRemoveExistingFloorUnderNearbyNeeders = true)
@@ -38,30 +38,31 @@ namespace Share_The_Load
 		{
 			Label forCheck = new Label();
 			Label continueLabel = il.DefineLabel();
-			bool firstBr = false;
-			bool secondBr = false;
 			bool setLabel = false;
-			foreach (CodeInstruction inst in instructions)
+
+			List<CodeInstruction> instList = instructions.ToList();
+			for(int i = 0; i < instList.Count(); i++)
 			{
-				if (inst.opcode == OpCodes.Br && !firstBr)
+				CodeInstruction inst = instList[i];
+
+				//i=0;Br To Check label
+				if (inst.opcode == OpCodes.Br && instList[i - 1].opcode == OpCodes.Stloc_S && instList[i - 2].opcode == OpCodes.Ldc_I4_0)
 				{
-					firstBr = true;
 					forCheck = (Label)inst.operand;
 
 					List<CodeInstruction> instructionsList = instructions.ToList();
-					for (int i = instructionsList.Count() - 1; i >= 0; i--)
+					for (int k = instructionsList.Count() - 1; k >= 0; k--)
 					{
-						if (instructionsList[i].labels.Contains(forCheck))
+						if (instructionsList[k].labels.Contains(forCheck))
 						{
-							instructionsList[i - 4].labels.Add(continueLabel);
+							instructionsList[k - 4].labels.Add(continueLabel);
 							setLabel = true;
 							break;
 						}
 					}
 				}
-				else if (inst.opcode == OpCodes.Br && !secondBr)
+				else if (inst.opcode == OpCodes.Br && instList[i - 2].opcode == OpCodes.Ldfld)// operand == need, but inside a compilergenerated mess
 				{
-					secondBr = true;
 					if (setLabel)
 						inst.operand = continueLabel;
 				}

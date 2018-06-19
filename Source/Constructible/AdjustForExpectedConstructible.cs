@@ -13,11 +13,11 @@ namespace Share_The_Load
 	[HarmonyPatch(typeof(WorkGiver_ConstructDeliverResources), "FindNearbyNeeders")]
 	public static class FindNearbyNeeders_Patch
 	{
-		//private HashSet<Thing> FindNearbyNeeders(Pawn pawn, ThingCountClass need, IConstructible c, int resTotalAvailable, bool canRemoveExistingFloorUnderNearbyNeeders, out int neededTotal, out Job jobToMakeNeederAvailable)
+		//private HashSet<Thing> FindNearbyNeeders(Pawn pawn, ThingDefCountClass need, IConstructible c, int resTotalAvailable, bool canRemoveExistingFloorUnderNearbyNeeders, out int neededTotal, out Job jobToMakeNeederAvailable)
 		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
 			MethodInfo AmountNeededByOfInfo = AccessTools.Method(typeof(GenConstruct), "AmountNeededByOf");
-			FieldInfo CountThingDefInfo = AccessTools.Field(typeof(ThingCountClass), "thingDef");
+			FieldInfo CountThingDefInfo = AccessTools.Field(typeof(ThingDefCountClass), "thingDef");
 
 			MethodInfo AdjustForExpectedInfo = AccessTools.Method(typeof(FindNearbyNeeders_Patch), nameof(AdjustForExpected));
 
@@ -61,17 +61,17 @@ namespace Share_The_Load
 			}
 		}
 
-		public static List<ThingCountClass> FilterForExpected(List<ThingCountClass> materialsNeeded, Thing c)
+		public static List<ThingDefCountClass> FilterForExpected(List<ThingDefCountClass> materialsNeeded, Thing c)
 		{
-			List<ThingCountClass> needs = new List<ThingCountClass>(materialsNeeded.Count);
+			List<ThingDefCountClass> needs = new List<ThingDefCountClass>(materialsNeeded.Count);
 			foreach(var t in materialsNeeded)
 			{
-				needs.Add(new ThingCountClass(t.thingDef, t.count));
+				needs.Add(new ThingDefCountClass(t.thingDef, t.count));
 			}
 			
 			for (int i = 0; i < needs.Count; i++)
 			{
-				ThingCountClass thingNeeds = needs[i];
+				ThingDefCountClass thingNeeds = needs[i];
 				thingNeeds.count -= ExpectingComp.ExpectedCount(c, thingNeeds.thingDef);
 				if(thingNeeds.count <= 0)
 				{
