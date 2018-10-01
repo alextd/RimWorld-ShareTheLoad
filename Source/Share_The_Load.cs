@@ -2,6 +2,7 @@
 using Verse;
 using UnityEngine;
 using Harmony;
+using RimWorld;
 
 namespace Share_The_Load
 {
@@ -15,7 +16,18 @@ namespace Share_The_Load
 			HarmonyInstance.DEBUG = true;
 #endif
 			HarmonyInstance harmony = HarmonyInstance.Create("Uuugggg.rimworld.Share_The_Load.main");
+			
+			//Turn off DefOf warning since harmony patches trigger it.
+			harmony.Patch(AccessTools.Method(typeof(DefOfHelper), "EnsureInitializedInCtor"),
+				new HarmonyMethod(typeof(Mod), "EnsureInitializedInCtorPrefix"), null);
+			
 			harmony.PatchAll();
+		}
+
+		public static bool EnsureInitializedInCtorPrefix()
+		{
+			//No need to display this warning.
+			return false;
 		}
 
 		public override void DoSettingsWindowContents(Rect inRect)
