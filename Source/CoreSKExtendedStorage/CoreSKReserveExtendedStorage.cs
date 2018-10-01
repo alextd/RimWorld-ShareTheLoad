@@ -18,7 +18,7 @@ namespace Share_The_Load
 		static ExtendedStoragePatches_SK()
 		{
 			if (!ModCompatibilityCheck.ExtendedStorageSKIsActive) return;
-			Log.Message("Share The Load patching with Extended Storage SK!");
+			Log.Message($"Share The Load patching with Extended Storage SK!");
 
 			HarmonyInstance harmony = HarmonyInstance.Create("Uuugggg.rimworld.Share_The_Load-ES-SK.main");
 			harmony.Patch(AccessTools.Method(typeof(ReservationManager), "CanReserve"),
@@ -43,14 +43,14 @@ namespace Share_The_Load
 				if(claimant.Map.thingGrid.ThingsAt(target.Cell).FirstOrDefault(t => t is Building_ExtendedStorage) is Thing thing)
 				{
 					Building_ExtendedStorage storage = thing as Building_ExtendedStorage;
-					Log.Message(claimant + " can reserveES? " + target.Cell + " is " + storage);
+					Log.Message("{claimant} can reserveES? {target.Cell} is {storage}");
 
 					int canDo = storage.ApparentMaxStorage - storage.StoredThing?.stackCount ?? 0;
 					int expected = ExpectingComp.ExpectedCount(q => q.claimed == thing);
 
 					if (canDo > expected)
 					{
-						Log.Message(claimant + " can reserveES " + storage);
+						Log.Message("{claimant} can reserveES {storage}");
 						__result = true;
 						return false;
 					}
@@ -77,17 +77,17 @@ namespace Share_The_Load
 					Thing deliverThing = job.targetA.Thing;
 					ThingDef resource = deliverThing.def;
 
-					Log.Message(claimant + " reservingES " + storage + " resource = " + resource + "(" + count + ")");
-					Log.Message("	out of: " + canDo);
+					Log.Message("{claimant} reservingES {storage} resource = {resource}({count})");
+					Log.Message($"	out of: {canDo}");
 
 
 					int availableCount = deliverThing.stackCount;// + job.targetQueueA?.Sum(tar => tar.Thing.stackCount) ?? 0;
 																											 //HaulToCell doesn't queue up its reservations, and so we don't know if there are more to get
 					count = Mathf.Min(new int[] { count, claimant.carryTracker.MaxStackSpaceEver(resource), availableCount, canDo });
 
-					Log.Message(storage + " was expecting " + resource + "(" + ExpectingComp.ExpectedCount(storage, resource) + ")");
+					Log.Message("{storage} was expecting {resource}(" + ExpectingComp.ExpectedCount(storage, resource) + ")");
 					ExpectingComp.Add(claimant, job, storage, resource, count);
-					Log.Message(storage + " now expecting " + resource + "(" + ExpectingComp.ExpectedCount(storage, resource) + ")");
+					Log.Message("{storage} now expecting {resource}(" + ExpectingComp.ExpectedCount(storage, resource) + ")");
 
 					__result = true;
 					return false;

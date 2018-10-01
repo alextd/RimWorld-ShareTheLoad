@@ -18,14 +18,14 @@ namespace Share_The_Load
 		{
 			if (claimant.IsFreeColonist && target.Thing is IConstructible c && !(c is Blueprint_Install))
 			{
-				Log.Message(claimant + " can reserve? " + c + " needs " + c.MaterialsNeeded().ToStringSafeEnumerable());
+				Log.Message("{claimant} can reserve? {c} needs {c.MaterialsNeeded().ToStringSafeEnumerable()}");
 
 				// Even though you'd like to check MaterialsNeeded_Patch.FilterForExpected(c.MaterialsNeeded(), c)
 				// We don't know if the job is deliver or finish, so can't decide at this point
 
 				if (c.MaterialsNeeded().Count > 0)
 				{
-					Log.Message(claimant + " can reserve " + target.Thing);
+					Log.Message("{claimant} can reserve {target.Thing}");
 					__result = true;
 					return false;
 				}
@@ -51,15 +51,15 @@ namespace Share_The_Load
 				ThingDef resource = deliverThing.def;
 				int neededCount = c.MaterialsNeeded().FirstOrDefault(tc => tc.thingDef == resource)?.count ?? 0;
 
-				Log.Message(claimant + " reserving " + building + " resource = " + resource + "(" + count + ")");
-				Log.Message("	out of: " + c.MaterialsNeeded().ToStringSafeEnumerable());
+				Log.Message("{claimant} reserving {building} resource = {resource}({count})");
+				Log.Message($"	out of: {c.MaterialsNeeded().ToStringSafeEnumerable()}");
 
 
 				int availableCount = deliverThing.stackCount + job.targetQueueA?.Sum(tar => tar.Thing.stackCount) ?? 0;
 				count = Mathf.Min(new int[] { count, claimant.carryTracker.MaxStackSpaceEver(resource), availableCount, neededCount });
-				Log.Message(c + " was expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
+				Log.Message("{c} was expecting {resource}(" + ExpectingComp.ExpectedCount(building, resource) + ")");
 				ExpectingComp.Add(claimant, job, building, resource, count);
-				Log.Message(c + " now expecting " + resource + "(" + ExpectingComp.ExpectedCount(building, resource) + ")");
+				Log.Message("{c} now expecting {resource}(" + ExpectingComp.ExpectedCount(building, resource) + ")");
 				__result = true;
 				return false;
 			}
