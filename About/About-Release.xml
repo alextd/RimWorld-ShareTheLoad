@@ -2,7 +2,7 @@
 <ModMetaData>
 	<name>Share The Load</name>
 	<author>Uuugggg</author>
-	<targetVersion>0.19.0</targetVersion>
+	<targetVersion>1.0.0</targetVersion>
 	<description>Multiple people can deliver resources to a blueprint.
 	
 Share The Load tracks what is needed and doesn't deliver too much.
