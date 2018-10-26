@@ -14,14 +14,7 @@ namespace Share_The_Load
 		{
 			get
 			{
-				return ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "ExtendedStorageFluffyHarmonised");
-			}
-		}
-		public static bool ExtendedStorageSKIsActive
-		{
-			get
-			{
-				return ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "Core SK");
+				return ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "ExtendedStorageFluffyHarmonised" || m.Name == "Extended Storage");
 			}
 		}
 	}
