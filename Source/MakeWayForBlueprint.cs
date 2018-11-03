@@ -124,7 +124,7 @@ namespace Share_The_Load
 
 		public static void Postfix(Job __result, Thing t)
 		{
-			if (t.Position.GetFirstThing<Blueprint>(t.Map) != null)
+			if (__result != null && t.Position.GetFirstThing<Blueprint>(t.Map) != null)
 				__result.ignoreDesignations = true;
 		}
 	}
