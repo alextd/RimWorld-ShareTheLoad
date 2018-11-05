@@ -13,19 +13,14 @@ namespace Share_The_Load
 {
 	static class MakeWayForBlueprint
 	{
-		public static Thing MakeWayFor(Thing blueprint, ThingCategory category)
+		public static IEnumerable<Thing> MakeWayFor(Thing blueprint, ThingCategory category)
 		{
 			Map map = blueprint.Map;
-			DesignationManager des = map.designationManager;
 			foreach (IntVec3 cell in GenAdj.CellsOccupiedBy(blueprint))
 				foreach (Thing thing in cell.GetThingList(map))
-				{
-					if (GenConstruct.BlocksConstruction(blueprint, thing))
-						if (thing.def.category == category)
-							return thing;
-				}
-
-			return null;
+					if (thing.def.category == category)
+						if (GenConstruct.BlocksConstruction(blueprint, thing))
+							yield return thing;
 		}
 	}
 
@@ -41,7 +36,7 @@ namespace Share_The_Load
 				yield return t;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
-				if (MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Plant) is Thing t)
+				foreach(Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Plant))
 					yield return t;
 		}
 	}
@@ -90,9 +85,9 @@ namespace Share_The_Load
 				yield return t;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
-				if (MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Building) is Thing t &&
-					t.def.mineable)
-					yield return t;
+				foreach(Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Building))
+					if(t.def.mineable)
+						yield return t;
 		}
 	}
 
