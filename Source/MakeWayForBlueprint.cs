@@ -36,8 +36,9 @@ namespace Share_The_Load
 				yield return t;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
-				foreach(Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Plant))
-					yield return t;
+				if(!blueprint.IsForbidden(pawn))
+					foreach(Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Plant))
+						yield return t;
 		}
 	}
 
@@ -85,9 +86,10 @@ namespace Share_The_Load
 				yield return t;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
-				foreach(Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Building))
-					if(t.def.mineable)
-						yield return t;
+				if (!blueprint.IsForbidden(pawn))
+					foreach (Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Building))
+						if(t.def.mineable)
+							yield return t;
 		}
 	}
 
