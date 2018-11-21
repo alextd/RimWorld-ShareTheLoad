@@ -34,6 +34,8 @@ namespace Share_The_Load
 		{
 			foreach (Thing t in __result)
 				yield return t;
+			
+			if (!Settings.Get().makeWayJobs) yield break;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
 				if(!blueprint.IsForbidden(pawn))
@@ -84,6 +86,8 @@ namespace Share_The_Load
 		{
 			foreach (Thing t in __result)
 				yield return t;
+
+			if (!Settings.Get().makeWayJobs) yield break;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
 				if (!blueprint.IsForbidden(pawn))
