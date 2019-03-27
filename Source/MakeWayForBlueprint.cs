@@ -59,7 +59,6 @@ namespace Share_The_Load
 
 				if (afterCutPlantDes && i.opcode == OpCodes.Ldnull)
 				{
-					Log.Message($"Transpiling in NewCutPlantJob");
 					yield return new CodeInstruction(OpCodes.Ldarg_2) { labels = i.labels }; //Thing t
 					yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MakeWay_Plant_Job), nameof(NewCutPlantJob)));
 				}
