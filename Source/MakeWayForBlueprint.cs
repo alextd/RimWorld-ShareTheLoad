@@ -15,6 +15,8 @@ namespace Share_The_Load
 	{
 		public static IEnumerable<Thing> MakeWayFor(Thing blueprint, ThingCategory category)
 		{
+			if (blueprint.Faction != Faction.OfPlayer) yield break;
+
 			Map map = blueprint.Map;
 			foreach (IntVec3 cell in GenAdj.CellsOccupiedBy(blueprint))
 				foreach (Thing thing in cell.GetThingList(map))
