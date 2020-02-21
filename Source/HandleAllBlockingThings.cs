@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
 using static System.Reflection.Emit.OpCodes;
-using Harmony;
+using HarmonyLib;
 using Verse;
 using Verse.AI;
 using RimWorld;
@@ -24,7 +24,7 @@ namespace Share_The_Load
 
 			foreach (CodeInstruction i in instructions)
 			{
-				if (i.opcode == Call && i.operand == FirstBlockingThingInfo)
+				if (i.opcode == Call && i.operand.Equals(FirstBlockingThingInfo))
 					i.operand = FirstReservableBlockingThingInfo;
 				yield return i;
 			}

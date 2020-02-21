@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
-using Harmony;
+using HarmonyLib;
 using Verse;
 using RimWorld;
 
@@ -24,7 +24,7 @@ namespace Share_The_Load
 			foreach (CodeInstruction i in instructions)
 			{
 				yield return i;
-				if(i.opcode == OpCodes.Call && i.operand == AmountNeededByOfInfo)
+				if(i.opcode == OpCodes.Call && i.operand.Equals(AmountNeededByOfInfo))
 				{
 					yield return new CodeInstruction(OpCodes.Ldloc_2);
 					yield return new CodeInstruction(OpCodes.Ldarg_2);
@@ -53,7 +53,7 @@ namespace Share_The_Load
 			foreach (CodeInstruction i in instructions)
 			{
 				yield return i;
-				if(i.opcode == OpCodes.Callvirt && i.operand == MaterialsNeededInfo)
+				if(i.opcode == OpCodes.Callvirt && i.operand.Equals(MaterialsNeededInfo))
 				{
 					yield return new CodeInstruction(OpCodes.Ldarg_2);//constructible thing
 					yield return new CodeInstruction(OpCodes.Call, FilterForExpectedInfo);

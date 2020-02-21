@@ -7,7 +7,7 @@ using System.Reflection.Emit;
 using Verse;
 using Verse.AI;
 using RimWorld;
-using Harmony;
+using HarmonyLib;
 
 namespace Share_The_Load
 {
@@ -67,7 +67,7 @@ namespace Share_The_Load
 				else
 					yield return i;
 
-				if (i.operand == CutPlantInfo)
+				if (i.operand.Equals(CutPlantInfo))
 					afterCutPlantDes = true;
 			}
 		}
@@ -111,7 +111,7 @@ namespace Share_The_Load
 			{
 				yield return i;
 
-				if (i.operand == DesignationAtInfo)
+				if (i.operand.Equals(DesignationAtInfo))
 				{
 					yield return new CodeInstruction(OpCodes.Ldarg_2); //Thing t
 					yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MakeWay_Miner_Job), nameof(IsNotNullOrUnderBlueprint)));

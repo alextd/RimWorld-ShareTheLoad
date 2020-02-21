@@ -6,7 +6,7 @@ using System.Text;
 using Verse;
 using Verse.AI;
 using RimWorld;
-using Harmony;
+using HarmonyLib;
 using UnityEngine;//For the Mathf.min of 3 things
 using ExtendedStorage;
 
@@ -20,7 +20,7 @@ namespace Share_The_Load
 			if (!ModCompatibilityCheck.ExtendedStorageIsActive) return;
 			Log.Message($"Share The Load patching with Extended Storage!");
 
-			HarmonyInstance harmony = HarmonyInstance.Create("Uuugggg.rimworld.Share_The_Load-ES.main");
+			Harmony harmony = new Harmony("Uuugggg.rimworld.Share_The_Load-ES.main");
 			harmony.Patch(AccessTools.Method(typeof(ReservationManager), "CanReserve"),
 				new HarmonyMethod(typeof(CanReserve_Patch_ES), "Prefix"), null);
 			harmony.Patch(AccessTools.Method(typeof(ReservationManager), "Reserve"),

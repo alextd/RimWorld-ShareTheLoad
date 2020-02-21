@@ -4,7 +4,9 @@
 	<author>Uuugggg</author>
 	<supportedVersions>
 		<li>1.0</li>
+		<li>1.1</li>
 	</supportedVersions>
+	<packageId>Uuugggg.ShareTheLoad</packageId>
 	<description>Multiple people can deliver resources to a blueprint.
 	
 Share The Load tracks what is needed and doesn't deliver too much.
