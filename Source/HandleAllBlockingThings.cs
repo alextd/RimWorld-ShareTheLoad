@@ -34,8 +34,8 @@ namespace Share_The_Load
 		{
 			Thing thing = constructible is Blueprint b ? GenConstruct.MiniToInstallOrBuildingToReinstall(b) : null;
 
-			for(var iterator = constructible.OccupiedRect().GetIterator(); !iterator.Done(); iterator.MoveNext())
-				foreach(Thing t in iterator.Current.GetThingList(constructible.Map))
+			foreach(var pos in constructible.OccupiedRect())
+				foreach(Thing t in pos.GetThingList(constructible.Map))
 					if (GenConstruct.BlocksConstruction(constructible, t) && t != pawnToIgnore && t != thing && pawnToIgnore.CanReserve(t))
 						return t;
 
