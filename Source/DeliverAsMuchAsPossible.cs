@@ -45,7 +45,10 @@ namespace Share_The_Load
 				CodeInstruction inst = instList[i];
 
 				//i=0;Br To for condition
-				if (!setLabel && inst.opcode == OpCodes.Br && instList[i - 1].opcode == OpCodes.Stloc_S && instList[i - 2].opcode == OpCodes.Ldc_I4_0)
+				if (!setLabel
+				&& inst.opcode == OpCodes.Br
+				&& instList[i - 1].IsStLoc()
+				&& instList[i - 2].LoadsContant(0))
 				{
 					Label forCheck = (Label)inst.operand;
 					
@@ -60,7 +63,9 @@ namespace Share_The_Load
 					}
 				}
 				//break; preceded by thingDefCountClass = object.need;
-				else if (inst.opcode == OpCodes.Br && instList[i - 1].opcode == OpCodes.Stloc_S && instList[i - 2].opcode == OpCodes.Ldfld)// operand == need, but inside a compilergenerated mess
+				else if (inst.opcode == OpCodes.Br
+				&& instList[i - 1].IsStLoc()
+				&& instList[i - 2].opcode == OpCodes.Ldfld)// operand == need, but inside a compilergenerated mess
 				{
 					if (setLabel)
 						inst.operand = continueLabel;
