@@ -47,8 +47,8 @@ namespace Share_The_Load
 				//i=0;Br To for condition
 				if (!setLabel
 				&& inst.opcode == OpCodes.Br
-				&& instList[i - 1].IsStLoc()
-				&& instList[i - 2].LoadsContant(0))
+				&& instList[i - 1].IsStloc()
+				&& instList[i - 2].LoadsConstant(0))
 				{
 					Label forCheck = (Label)inst.operand;
 					
@@ -64,7 +64,7 @@ namespace Share_The_Load
 				}
 				//break; preceded by thingDefCountClass = object.need;
 				else if (inst.opcode == OpCodes.Br
-				&& instList[i - 1].IsStLoc()
+				&& instList[i - 1].IsStloc()
 				&& instList[i - 2].opcode == OpCodes.Ldfld)// operand == need, but inside a compilergenerated mess
 				{
 					if (setLabel)
