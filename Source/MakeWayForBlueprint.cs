@@ -67,7 +67,7 @@ namespace Share_The_Load
 				else
 					yield return i;
 
-				if (i.operand.Equals(CutPlantInfo))
+				if (i.LoadsField(CutPlantInfo))
 					afterCutPlantDes = true;
 			}
 		}
@@ -111,7 +111,7 @@ namespace Share_The_Load
 			{
 				yield return i;
 
-				if (i.operand.Equals(DesignationAtInfo))
+				if (i.Calls(DesignationAtInfo))
 				{
 					yield return new CodeInstruction(OpCodes.Ldarg_2); //Thing t
 					yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MakeWay_Miner_Job), nameof(IsNotNullOrUnderBlueprint)));
