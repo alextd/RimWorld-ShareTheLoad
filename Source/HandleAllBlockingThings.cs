@@ -25,8 +25,9 @@ namespace Share_The_Load
 			foreach (CodeInstruction i in instructions)
 			{
 				if (i.Calls(FirstBlockingThingInfo))
-					i.operand = FirstReservableBlockingThingInfo;
-				yield return i;
+					yield return new CodeInstruction(OpCodes.Call, FirstReservableBlockingThingInfo);
+				else
+					yield return i;
 			}
 		}
 

@@ -68,7 +68,10 @@ namespace Share_The_Load
 				&& instList[i - 2].opcode == OpCodes.Ldfld)// operand == need, but inside a compilergenerated mess
 				{
 					if (setLabel)
-						inst.operand = continueLabel;
+					{
+						yield return new CodeInstruction(OpCodes.Br, continueLabel);
+						continue;
+					}
 				}
 				yield return inst;
 			}
