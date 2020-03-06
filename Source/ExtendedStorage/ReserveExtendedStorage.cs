@@ -8,16 +8,27 @@ using Verse.AI;
 using RimWorld;
 using HarmonyLib;
 using UnityEngine;//For the Mathf.min of 3 things
-using ExtendedStorage;
 
 namespace Share_The_Load
 {
 	[StaticConstructorOnStartup]
 	public static class ExtendedStoragePatches
 	{
+		public static Type typeBuilding_ExtendedStorage;
 		static ExtendedStoragePatches()
 		{
-			if (!ModCompatibilityCheck.ExtendedStorageIsActive) return;
+			Log.Message($"Share The Load checking with Extended Storage!");
+			typeBuilding_ExtendedStorage = AccessTools.TypeByName("ExtendedStorage.Building_ExtendedStorage");
+			if (typeBuilding_ExtendedStorage == null) return;
+
+			ApparentMaxStorageInfo = AccessTools.Property(typeBuilding_ExtendedStorage, "ApparentMaxStorage").GetGetMethod();
+			StoredThingTotalInfo = AccessTools.Property(typeBuilding_ExtendedStorage, "StoredThingTotal").GetGetMethod();
+
+			if(ApparentMaxStorageInfo == null || StoredThingTotalInfo == null)
+			{
+				Verse.Log.Warning("ShareTheLoad couldn't work with ExtendedStorage, whooops!");
+				return;
+			}
 			Log.Message($"Share The Load patching with Extended Storage!");
 
 			Harmony harmony = new Harmony("Uuugggg.rimworld.Share_The_Load-ES.main");
@@ -30,6 +41,18 @@ namespace Share_The_Load
 			harmony.Patch(AccessTools.Method(typeof(ReservationManager), "ReleaseClaimedBy"),
 				new HarmonyMethod(typeof(ReleaseClaimedBy_Patch_ES), "Prefix"), null);
 		}
+
+		public static MethodInfo ApparentMaxStorageInfo;
+		public static int ApparentMaxStorage(this Thing building)//Building_ExtendedStorage
+		{
+			return (int)ApparentMaxStorageInfo.Invoke(building, null);
+		}
+
+		public static MethodInfo StoredThingTotalInfo;
+		public static int StoredThingTotal(this Thing building)//Building_ExtendedStorage
+		{
+			return (int)StoredThingTotalInfo.Invoke(building, null);
+		}
 	}
 
 	//[HarmonyPatch(typeof(ReservationManager), "CanReserve")]
@@ -40,13 +63,14 @@ namespace Share_The_Load
 		{
 			if (claimant.IsFreeColonist && target.Cell != LocalTargetInfo.Invalid)
 			{
-				if(claimant.Map.thingGrid.ThingsAt(target.Cell).FirstOrDefault(t => t is Building_ExtendedStorage) is Thing thing)
+				if(claimant.Map.thingGrid.ThingsAt(target.Cell)
+					.FirstOrDefault(t => t.GetType() == ExtendedStoragePatches.typeBuilding_ExtendedStorage)
+					is Thing storage)
 				{
-					Building_ExtendedStorage storage = thing as Building_ExtendedStorage;
 					Log.Message($"{claimant} can reserveES? {target.Cell} is {storage}");
 
-					int canDo = storage.ApparentMaxStorage - storage.StoredThingTotal;
-					int expected = ExpectingComp.ExpectedCount(q => q.claimed == thing);
+					int canDo = storage.ApparentMaxStorage() - storage.StoredThingTotal();
+					int expected = ExpectingComp.ExpectedCount(q => q.claimed == storage);
 
 					if (canDo > expected)
 					{
@@ -67,10 +91,11 @@ namespace Share_The_Load
 		public static bool Prefix(Pawn claimant, Job job, LocalTargetInfo target, ref bool __result)
 		{
 			if (claimant.IsFreeColonist && target.Cell != LocalTargetInfo.Invalid
-				&& claimant.Map.thingGrid.ThingsAt(target.Cell).FirstOrDefault(t => t is Building_ExtendedStorage) is Building_ExtendedStorage storage
+				&& claimant.Map.thingGrid.ThingsAt(target.Cell)
+					.FirstOrDefault(t => t.GetType() == ExtendedStoragePatches.typeBuilding_ExtendedStorage) is Thing storage
 				&& job.def == JobDefOf.HaulToCell)
 			{
-				int canDo = storage.ApparentMaxStorage - storage.StoredThingTotal;
+				int canDo = storage.ApparentMaxStorage() - storage.StoredThingTotal();
 				if (canDo > 0)
 				{
 					int count = job.count;
@@ -104,7 +129,7 @@ namespace Share_The_Load
 		public static void Prefix(LocalTargetInfo target, Pawn claimant, Job job)
 		{
 			if (claimant.IsFreeColonist && target.Cell != LocalTargetInfo.Invalid
-				&& claimant.Map.thingGrid.ThingsAt(target.Cell).FirstOrDefault(t => t is Building_ExtendedStorage) is Thing thing
+				&& claimant.Map.thingGrid.ThingsAt(target.Cell).FirstOrDefault(t => t.GetType() == ExtendedStoragePatches.typeBuilding_ExtendedStorage) is Thing thing
 				&& job.def == JobDefOf.HaulToCell)
 				ExpectingComp.Remove(q => q.claimant == claimant && q.job == job && q.claimed == thing);
 		}
