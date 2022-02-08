@@ -6,15 +6,10 @@ using RimWorld;
 
 namespace Share_The_Load
 {
-	class Settings : ModSettings
+	public class Settings : ModSettings
 	{
 		public bool deliverAsMuchAsYouCan = false;
 		public bool makeWayJobs = false;
-
-		public static Settings Get()
-		{
-			return LoadedModManager.GetMod<Share_The_Load.Mod>().GetSettings<Settings>();
-		}
 
 		public void DoWindowContents(Rect wrect)
 		{

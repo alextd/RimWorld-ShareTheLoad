@@ -16,7 +16,7 @@ namespace Share_The_Load
 		//public bool ThingsAvailableAnywhere(ThingDefCountClass need, Pawn pawn)
 		public static bool Prefix(ThingDefCountClass need, Pawn pawn, ref bool __result)
 		{
-			if (Settings.Get().deliverAsMuchAsYouCan)
+			if (Mod.settings.deliverAsMuchAsYouCan)
 			{
 				List<Thing> list = pawn.Map.listerThings.ThingsOfDef(need.thingDef);
 				__result = list.Any(t => !t.IsForbidden(pawn));
