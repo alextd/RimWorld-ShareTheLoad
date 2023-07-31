@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<LanguageData>
-	
-	<TD.SettingDeliverAny>在资源不足以完成建筑的情况下，也要交付资源</TD.SettingDeliverAny>
-	<TD.SettingBlockingJobs>让其他工作针对蓝图清理物品</TD.SettingBlockingJobs>
-	<TD.SettingBlockingJobsDesc>种植者和矿工将清理蓝图周围的物品\n\n（有报告称这导致右键点击变慢，因此可以禁用此功能以解决该问题。）</TD.SettingBlockingJobsDesc>
-	<TD.ShareTheLoad>Share The Load</TD.ShareTheLoad>
-	
-</LanguageData>
