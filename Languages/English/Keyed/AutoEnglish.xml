@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 	
-	<TD.SettingDeliverAny>Deliver resources even if there's not enough to finish the building</TD.SettingDeliverAny>
-	<TD.SettingBlockingJobs>Make other jobs clear things for blueprints</TD.SettingBlockingJobs>
+	<TD.SettingBlockingJobs>Other workers not assigned to construction will remove things (i.e. trees) for blueprints</TD.SettingBlockingJobs>
 	<TD.SettingBlockingJobsDesc>Plant cutters and miners will clear away things for blueprints.\n\n(There are reports that this is making right-clicking something slow, so disable this to probably fix that.)</TD.SettingBlockingJobsDesc>
 	<TD.ShareTheLoad>Share The Load</TD.ShareTheLoad>
 	

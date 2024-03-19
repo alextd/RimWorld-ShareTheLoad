@@ -8,7 +8,6 @@ namespace Share_The_Load
 {
 	public class Settings : ModSettings
 	{
-		public bool deliverAsMuchAsYouCan = false;
 		public bool makeWayJobs = false;
 
 		public void DoWindowContents(Rect wrect)
@@ -16,7 +15,6 @@ namespace Share_The_Load
 			var options = new Listing_Standard();
 			options.Begin(wrect);
 			
-			options.CheckboxLabeled("TD.SettingDeliverAny".Translate(), ref deliverAsMuchAsYouCan);
 			options.CheckboxLabeled("TD.SettingBlockingJobs".Translate(), ref makeWayJobs, "TD.SettingBlockingJobsDesc".Translate());
 			options.Gap();
 
@@ -25,7 +23,6 @@ namespace Share_The_Load
 		
 		public override void ExposeData()
 		{
-			Scribe_Values.Look(ref deliverAsMuchAsYouCan, "deliverAsMuchAsYouCan", false);
 			Scribe_Values.Look(ref makeWayJobs, "makeWayJobs", true);
 		}
 	}

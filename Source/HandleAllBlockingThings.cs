@@ -12,6 +12,8 @@ using RimWorld;
 
 namespace Share_The_Load
 {
+	// Multiple people also clear things out of the way for construction as well.
+
 	[HarmonyPatch(typeof(GenConstruct), "HandleBlockingThingJob")]
 	class HandleAllBlockingThings
 	{
@@ -41,20 +43,6 @@ namespace Share_The_Load
 						return t;
 
 			return null;
-		}
-	}
-
-	[HarmonyPatch(typeof(GenConstruct), "BlocksConstruction")]
-	static class PawnBlockConstruction
-	{
-		static bool Prefix(ref bool __result, Thing t)
-		{
-			if (t is Pawn)
-			{
-				__result = false;
-				return false;
-			}
-			return true;
 		}
 	}
 }

@@ -11,6 +11,11 @@ using HarmonyLib;
 
 namespace Share_The_Load
 {
+	// Cutters/Miners make way for blueprints.
+	// GenConstruct.HandleBlockingThingJob assigned cutting and mining jobs, but only to builders
+	// Now cutters/miners will do it.
+	// (Deconstructing is already going to be done by builders)
+
 	static class MakeWayForBlueprint
 	{
 		public static IEnumerable<Thing> MakeWayFor(Thing blueprint, ThingCategory category)
@@ -26,8 +31,8 @@ namespace Share_The_Load
 		}
 	}
 
-	//Same things that GenConstruct.HandleBlockingThingJob does : cutting and mining. But now cutters/miners will do it.
-	//Deconstructing is already going ot be done by builders
+
+	// Cutters 
 	[HarmonyPatch(typeof(WorkGiver_PlantsCut), "PotentialWorkThingsGlobal")]
 	static class MakeWay_Plant
 	{
@@ -40,8 +45,8 @@ namespace Share_The_Load
 			if (!Mod.settings.makeWayJobs) yield break;
 
 			foreach (Thing blueprint in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint))
-				if(!blueprint.IsForbidden(pawn))
-					foreach(Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Plant))
+				if (!blueprint.IsForbidden(pawn))
+					foreach (Thing t in MakeWayForBlueprint.MakeWayFor(blueprint, ThingCategory.Plant))
 						yield return t;
 		}
 	}
@@ -79,6 +84,24 @@ namespace Share_The_Load
 		}
 	}
 
+	// 1.1 added (and I fixed in 1.5.. ahem) that cutter jobs were skipped if no designations exist. 
+	// So we need to check if any blueprints exist and NOT skip
+	[HarmonyPatch(typeof(WorkGiver_PlantsCut), nameof(WorkGiver_PlantsCut.ShouldSkip))]
+	public static class SkipNotIfBlueprints
+	{
+		//public override bool ShouldSkip(Pawn pawn, bool forced = false)
+		public static void Postfix(WorkGiver_PlantsCut __instance, ref bool __result, Pawn pawn)
+		{
+			if (__result)
+			{
+				// Not Empty, Don't skip
+				__result = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint).Empty();
+			}
+		}
+	}
+
+
+	// Miners
 	[HarmonyPatch(typeof(WorkGiver_Miner), "PotentialWorkThingsGlobal")]
 	static class MakeWay_Miner
 	{
@@ -130,4 +153,19 @@ namespace Share_The_Load
 				__result.ignoreDesignations = true;
 		}
 	}
+
+	[HarmonyPatch(typeof(WorkGiver_Miner), nameof(WorkGiver_Miner.ShouldSkip))]
+	public static class SkipNotIfBlueprints_Miner
+	{
+		//public override bool ShouldSkip(Pawn pawn, bool forced = false)
+		public static void Postfix(WorkGiver_PlantsCut __instance, ref bool __result, Pawn pawn)
+		{
+			if (__result)
+			{
+				// Not Empty, Don't skip
+				__result = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint).Empty();
+			}
+		}
+	}
+
 }
